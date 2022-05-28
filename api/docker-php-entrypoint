@@ -1,0 +1,43 @@
+#!/bin/sh
+set -e
+
+www=/var/www/html/api/v1
+log=/var/log/onmyshelf
+
+# init config file if not exists
+if ! [ -f /config/config.php ] ; then
+	cp $www/config.default.php /config/config.php
+	sed -i "s|'LOGFILE'.*|'LOGFILE', '/var/log/onmyshelf/onmyshelf.log')\;|" /config/config.php
+	echo "Waiting for database to be ready..."
+	sleep 20
+fi
+
+# apply config
+cp /config/config.php $www/config.php
+chown www-data $www/config.php && chmod 400 $www/config.php
+
+# prepare log file
+mkdir -p $log
+if ! [ -f $log/onmyshelf.log ] ; then
+	touch $log/onmyshelf.log
+	chmod 600 $log/onmyshelf.log
+fi
+
+chown www-data $log/onmyshelf.log
+
+# install/upgrade instance
+(cd $www && php bin/oms install && php bin/oms upgrade)
+
+# give access rights to the media library
+chown www-data /var/www/html/media && chmod u+rwx /var/www/html/media
+
+#
+#  Original entrypoint from official php image
+#
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- apache2-foreground "$@"
+fi
+
+exec "$@"

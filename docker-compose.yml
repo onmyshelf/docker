@@ -1,0 +1,31 @@
+version: '3'
+services:
+  db:
+    image: mariadb:10.6
+    restart: unless-stopped
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
+      - MARIADB_USER=onmyshelf
+      - MARIADB_PASSWORD=onmyshelf
+      - MARIADB_DATABASE=onmyshelf
+    volumes:
+      - ./volumes/db/mysql:/var/lib/mysql
+
+  api:
+    image: onmyshelf/api:1.0.0-rc.1
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - ./volumes/api/config:/config
+      - ./volumes/api/logs:/var/log/onmyshelf
+      - ./volumes/api/media:/var/www/html/media
+      - ./volumes/api/modules:/var/www/html/api/v1/modules
+
+  web:
+    image: onmyshelf/web:1.0.0-rc.1
+    depends_on:
+      - api
+    restart: unless-stopped
+    ports:
+      - ${HTTP_PORT:-8080}:80
