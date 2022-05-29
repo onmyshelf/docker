@@ -6,16 +6,17 @@
 
 # Install
 1. Copy `env.example` to `.env` and edit it
-2. Run `docker-compose up -d` and wait for it starts
-3. Login to your account. The default user is: `onmyshelf` with password: `onmyshelf`.
+2. Run `./install.sh`
+3. Login to your account. The default user is `onmyshelf` with password `onmyshelf`
 4. Change your password in `My profile`
 
-**Note**: The first start can be long, because of the database initialization.
+**Note**: The first start may take a long time, because of the database initialization.
 
 # Upgrade
-To upgrade to a new version:
-1. Pull the code: `git pull`
-2. Run `docker-compose up -d`
+To upgrade OnMyShelf, run the following command (specify a version number if you want):
+```bash
+./upgrade.sh [VERSION]
+```
 
 # Start/stop/restart server
 Run `docker-compose start|stop|restart`

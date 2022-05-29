@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: mariadb:10.6
+    image: mariadb:10.8
     restart: unless-stopped
     environment:
       - MARIADB_RANDOM_ROOT_PASSWORD=yes
@@ -16,6 +16,10 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+    environment:
+      - DEFAULT_LANG
+      - LOGGER_LEVEL
+      - READ_ONLY
     volumes:
       - ./volumes/api/config:/config
       - ./volumes/api/logs:/var/log/onmyshelf

@@ -1,9 +1,19 @@
 #!/bin/bash
 #
 #  Upgrade script for OnMyShelf docker
-#  https://onmyshelf.cm
+#
+#  Usage: ./upgrade.sh [VERSION]
 #
 
 cd "$(dirname "$0")" || exit
 
-git pull && docker-compose up -d
+# update git
+git pull || exit
+
+# go to version (if specified)
+if [ -n "$1" ] ; then
+	git checkout "$1" || exit
+fi
+
+# (re)start containers
+docker-compose up -d

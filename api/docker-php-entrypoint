@@ -1,16 +1,52 @@
 #!/bin/sh
 set -e
 
+#
+#  Config
+#
+
+# environment variables that can overwrite config.php file
+env_vars=(LOGGER_LEVEL READ_ONLY)
+
+# main folders
 www=/var/www/html/api/v1
-log=/var/log/onmyshelf
+log=/var/log/onmyshelf/onmyshelf.log
+
+#
+#  Functions
+#
+
+# Edit config.php
+# Usage: edit_config VARIABLE VALUE
+edit_config() {
+	value="'$2'"
+	case $2 in
+		true|false)
+			value=$2
+			;;
+	esac
+
+	sed -i "s|'$1'.*|'$1', $value)\;|" /config/config.php
+}
+
+#
+#  Main program
+#
 
 # init config file if not exists
 if ! [ -f /config/config.php ] ; then
 	cp $www/config.default.php /config/config.php
-	sed -i "s|'LOGFILE'.*|'LOGFILE', '/var/log/onmyshelf/onmyshelf.log')\;|" /config/config.php
 	echo "Waiting for database to be ready..."
 	sleep 20
 fi
+
+# set log file location
+edit_config LOGFILE $log
+
+# overwrite config file from environment variables
+for var in "${env_vars[@]}" ; do
+	[ -n "${!var}" ] && edit_config "$var" "${!var}"
+done
 
 # apply config
 cp /config/config.php $www/config.php
@@ -18,12 +54,12 @@ chown www-data $www/config.php && chmod 400 $www/config.php
 
 # prepare log file
 mkdir -p $log
-if ! [ -f $log/onmyshelf.log ] ; then
-	touch $log/onmyshelf.log
-	chmod 600 $log/onmyshelf.log
+if ! [ -f $log ] ; then
+	touch $log
+	chmod 600 $log
 fi
 
-chown www-data $log/onmyshelf.log
+chown www-data $log
 
 # install/upgrade instance
 (cd $www && php bin/oms install && php bin/oms upgrade)
