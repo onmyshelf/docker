@@ -6,7 +6,7 @@ set -e
 #
 
 # environment variables that can overwrite config.php file
-env_vars=(LOGGER_LEVEL READ_ONLY)
+env_vars=(LOGGER_LEVEL LOGFILE READ_ONLY)
 
 # main folders
 www=/var/www/html/api/v1
@@ -40,8 +40,11 @@ if ! [ -f /config/config.php ] ; then
 	sleep 20
 fi
 
-# set log file location
+# set default config values
+edit_config DEFAULT_LANG en_US
 edit_config LOGFILE $log
+edit_config LOGGER_LEVEL INFO
+edit_config READ_ONLY false
 
 # overwrite config file from environment variables
 for var in "${env_vars[@]}" ; do

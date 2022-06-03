@@ -18,6 +18,7 @@ services:
     restart: unless-stopped
     environment:
       - DEFAULT_LANG
+      - LOGFILE
       - LOGGER_LEVEL
       - READ_ONLY
     volumes:
