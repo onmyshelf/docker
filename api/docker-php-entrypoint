@@ -26,7 +26,7 @@ edit_config() {
 			;;
 	esac
 
-	sed -i "s|'$1'.*|'$1', $value)\;|" /config/config.php
+	sed -i "s|'$1'.*|'$1', $value)\;|" $www/config.php
 }
 
 #
@@ -34,8 +34,9 @@ edit_config() {
 #
 
 # init config file if not exists
-if ! [ -f /config/config.php ] ; then
-	cp $www/config.default.php /config/config.php
+if ! [ -f $www/config.php ] ; then
+	cp $www/config.default.php $www/config.php
+	chown www-data $www/config.php && chmod 400 $www/config.php
 	echo "Waiting for database to be ready..."
 	sleep 20
 fi
@@ -50,10 +51,6 @@ edit_config READ_ONLY false
 for var in "${env_vars[@]}" ; do
 	[ -n "${!var}" ] && edit_config "$var" "${!var}"
 done
-
-# apply config
-cp /config/config.php $www/config.php
-chown www-data $www/config.php && chmod 400 $www/config.php
 
 # prepare log file
 mkdir -p $(dirname $log)
