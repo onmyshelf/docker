@@ -33,8 +33,11 @@ edit_config() {
 #  Main program
 #
 
+echo "Starting OnMyShelf API server..."
+
 # init config file if not exists
 if ! [ -f $www/config.php ] ; then
+	echo "Initialize configuration file..."
 	cp $www/config.default.php $www/config.php
 	chown www-data $www/config.php && chmod 400 $www/config.php
 	echo "Waiting for database to be ready..."
