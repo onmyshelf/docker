@@ -12,7 +12,7 @@ services:
       - ./volumes/db/mysql:/var/lib/mysql
 
   api:
-    image: onmyshelf/api:1.0.0-rc.1
+    image: onmyshelf/api:1.0.0-rc.2
     depends_on:
       - db
     restart: unless-stopped
@@ -27,7 +27,7 @@ services:
       - ./volumes/api/modules:/var/www/html/api/v1/modules
 
   web:
-    image: onmyshelf/web:1.0.0-rc.1
+    image: onmyshelf/web:1.0.0-rc.2
     depends_on:
       - api
     restart: unless-stopped
