@@ -70,6 +70,8 @@ chown www-data $log
 # give access rights to the media library
 chown www-data /var/www/html/media && chmod u+rwx /var/www/html/media
 
+echo "Starting Apache server..."
+
 #
 #  Original entrypoint from official php image
 #

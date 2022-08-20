@@ -26,6 +26,16 @@ Run `docker-compose start|stop|restart`
 - Delete the `volumes` directory to delete all data if your want to reinstall a fresh server
 - Delete this current directory to completely uninstall OnMyShelf and remove all files
 
+# Behind a reverse proxy
+If you want to put OnMyShelf behind a reverse proxy, don't forget to increase the max body size.
+
+e.g. on nginx: `client_max_body_size 128M;`
+
+# Official docker images
+Official docker images are stored on Docker Hub: https://hub.docker.com/u/onmyshelf
+
+Put stars on them to support us!
+
 # License
 OnMyShelf is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for the full license text.
 
@@ -33,5 +43,3 @@ OnMyShelf is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for th
 Website: https://onmyshelf.cm
 
 Source code: https://github.com/onmyshelf/docker
-
-Author: Jean Prunneaux https://jean.prunneaux.com
