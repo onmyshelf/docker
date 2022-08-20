@@ -24,7 +24,7 @@ services:
     volumes:
       - ./volumes/api/logs:/var/log/onmyshelf
       - ./volumes/api/media:/var/www/html/media
-      - ./volumes/api/modules:/var/www/html/api/v1/modules
+      - ./volumes/api/modules:/var/www/html/api/v1/inc/modules
 
   web:
     image: onmyshelf/web:1.0.0-rc.2
