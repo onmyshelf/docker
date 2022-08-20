@@ -15,5 +15,5 @@ if [ -n "$1" ] ; then
 	git checkout "$1" || exit
 fi
 
-# (re)start containers
-docker-compose up -d
+# (re)pull images & (re)start containers
+docker-compose pull && docker-compose up -d
