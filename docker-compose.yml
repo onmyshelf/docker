@@ -22,6 +22,7 @@ services:
       - LOGGER_LEVEL
       - READ_ONLY
     volumes:
+      - ./volumes/api/backups:/var/backups/onmyshelf
       - ./volumes/api/logs:/var/log/onmyshelf
       - ./volumes/api/media:/var/www/html/media
       - ./volumes/api/modules:/var/www/html/api/v1/inc/modules
