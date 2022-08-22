@@ -45,7 +45,6 @@ if ! [ -f $www/config.php ] ; then
 fi
 
 # set default config values
-edit_config DEFAULT_LANG en_US
 edit_config LOGFILE $log
 edit_config LOGGER_LEVEL INFO
 edit_config READ_ONLY false

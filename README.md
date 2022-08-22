@@ -31,6 +31,15 @@ If you want to put OnMyShelf behind a reverse proxy, don't forget to increase th
 
 e.g. on nginx: `client_max_body_size 128M;`
 
+# Backups
+If you want to backup OnMyShelf database, run the following command:
+```bash
+docker-compose exec api /backup.sh
+```
+The database dump file is in the `volumes/api/backups` folder.
+
+If you want to backup all files including logs, you can backup the whole `volumes/api` folder.
+
 # Official docker images
 Official docker images are stored on Docker Hub: https://hub.docker.com/u/onmyshelf
 
