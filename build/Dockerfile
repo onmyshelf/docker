@@ -25,6 +25,10 @@ COPY backup.sh /
 RUN chown root:root /backup.sh && \
     chmod 700 /backup.sh
 
-# Copy sources
+# Copy web interface sources
+COPY web/dist/ /var/www/html
+COPY .htaccess /var/www/html
+
+# Copy API sources
 RUN mkdir -p /var/www/html/api/v1
-COPY src/ /var/www/html/api/v1
+COPY api/ /var/www/html/api/v1

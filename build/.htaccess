@@ -1,0 +1,11 @@
+# Rewrite rules
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^/?$ index.html [L]
+RewriteCond %{REQUEST_URI} !api
+RewriteCond %{REQUEST_URI} !assets
+RewriteCond %{REQUEST_URI} !index.html
+RewriteCond %{REQUEST_URI} !media
+RewriteRule ^ index.html [L]
+</IfModule>
