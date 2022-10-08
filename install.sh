@@ -66,7 +66,7 @@ if [ "$1" = -v ] ; then
 fi
 
 # check if docker command exists
-if lb_command_exists docker ; then
+if ! lb_command_exists docker ; then
 	echo "Docker is required but seems to be missing on this system."
 	if yesno "Do you want to install it?" ; then
 		install docker || exit
@@ -75,7 +75,7 @@ if lb_command_exists docker ; then
 fi
 
 # check if docker-compose command exists
-if lb_command_exists docker-compose ; then
+if ! lb_command_exists docker-compose ; then
 	echo "The docker-compose tool is required but seems to be missing on this system."
 	if yesno "Do you want to install it?" ; then
 		install docker-compose || exit
