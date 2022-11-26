@@ -12,7 +12,7 @@ services:
       - ./volumes/db/mysql:/var/lib/mysql
 
   server:
-    image: onmyshelf/server:${VERSION:-1.0.0-rc.3}
+    image: onmyshelf/server:${VERSION:-1.0.0-rc.4}
     depends_on:
       - db
     restart: unless-stopped
