@@ -13,7 +13,7 @@ RUN apt-get update && \
     sed -i 's/^\;*upload_max_filesize =/upload_max_filesize = 128M/; s/^\;*post_max_size =/post_max_size = 128M/' "$PHP_INI_DIR/php.ini" && \
     mkdir -p /var/www/html/api/v1
 
-HEALTHCHECK --interval=30s --timeout=3s \
+HEALTHCHECK --interval=15s --timeout=3s \
     CMD curl --fail http://localhost/api/v1/ || exit 1
 
 # Overwrite entrypoint

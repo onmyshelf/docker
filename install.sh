@@ -2,26 +2,18 @@
 #
 #  Install script for OnMyShelf docker
 #
-#  Usage: ./install.sh [-v VERSION]
-#
 
 #
 #  Functions
 #
 
-# Check if command(s) exists
-# Usage: lb_command_exists COMMAND [COMMAND...]
-lb_command_exists() {
-	which "$@" &> /dev/null
-}
-
-
-# Ask a question to be answered by y/n
-# Usage: yesno QUESTION
-yesno() {
-	echo -n "$* (y/N) "
-	read choice
-	[ "$(echo "$choice" | tr '[:upper:]' '[:lower:]')" = y ]
+# Print usage
+print_help() {
+	echo "Usage: $0 [OPTIONS]"
+	echo "Options:"
+	echo "   -v, --version VERSION  Choose a version to install"
+	echo "   -p, --port HTTP_PORT   Choose the default port"
+	echo "   -h, --help             Print this help"
 }
 
 
@@ -57,39 +49,117 @@ install() {
 	esac
 }
 
+
+#
+#  Main program
+#
+
+# go into current directory
 cd "$(dirname "$0")" || exit
 
-# go to version (if specified)
-if [ "$1" = -v ] ; then
-	git checkout "$2" || exit
-	echo
-fi
+# load functions
+source .functions.sh || exit
+
+# get options
+force_mode=false
+while [ $# -gt 0 ] ; do
+	case $1 in
+		-p|--port)
+			if [ -z "$2" ] ; then
+				print_help
+				exit 1
+			fi
+			port=$2
+			shift
+			;;
+		-v|--version)
+			if [ -z "$2" ] ; then
+				print_help
+				exit 1
+			fi
+			version=$2
+			shift
+			;;
+		-y|--yes)
+			force_mode=true
+			shift
+			;;
+		-h|--help)
+			print_help
+			exit 0
+			;;
+		-*)
+			echo "Unknown option: $1"
+			print_help
+			exit 1
+			;;
+	esac
+	shift
+done
 
 # check if docker command exists
 if ! lb_command_exists docker ; then
 	echo "Docker is required but seems to be missing on this system."
-	if yesno "Do you want to install it?" ; then
-		install docker || exit
+	if lb_yesno "Do you want to install it?" ; then
+		install docker
 	fi
 	echo
+
+	# re-check docker command
+	if ! lb_command_exists docker ; then
+		echo "Failed to find docker command."
+		echo "Please install it manually: https://docs.docker.com/get-docker/"
+		exit 1
+	fi
 fi
 
-# check if docker-compose command exists
-if ! lb_command_exists docker-compose ; then
-	echo "The docker-compose tool is required but seems to be missing on this system."
-	if yesno "Do you want to install it?" ; then
-		install docker-compose || exit
+if [ -z "$compose_command" ] ; then
+	echo "The docker compose tool is required but seems to be missing on this system."
+	echo "Do you want to install it?"
+	if lb_yesno "Install docker:" ; then
+		install docker-compose-plugin
 	fi
 	echo
+
+	# re-check if docker compose command exists
+	compose_command=$(compose_command)
+	if [ -z "$compose_command" ] ; then
+		echo "Failed to find docker compose command."
+		echo "Please install it manually: https://docs.docker.com/compose/install/"
+		exit 1
+	fi
 fi
 
+pull_project
+
+# copy config if not exists
 if ! [ -f .env ] ; then
-	echo "Copy environment variable..."
+	echo "Copy environment config file..."
 	cp env.example .env || exit
+	echo
+else
+	port=$(get_config HTTP_PORT)
 fi
 
-echo "Starting OnMyShelf..."
-docker-compose up -d || exit
+# get http port from config
+default_port=$(get_config HTTP_PORT)
 
-echo
-echo "OnMyShelf is ready!"
+if [ -z "$port" ] ; then
+	echo -n "Choose the HTTP port [$default_port]: "
+	read port
+	[ -z "$port" ] && port=$default_port
+	echo
+fi
+
+# change port if needed
+if [ "$port" != "$default_port" ] ; then
+	set_config HTTP_PORT "$port"|| exit
+fi
+
+change_version
+
+if ! $force_mode ; then
+	lb_yesno -y "Proceed to install?" || exit 0
+fi
+
+start_server
