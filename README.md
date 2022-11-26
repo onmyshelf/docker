@@ -48,12 +48,12 @@ docker run -d \
 ```bash
 docker run -d \
   --network onmyshelf \
-  -p 8080:80 \
+  -p 8035:80 \
   -v "$(pwd)/volumes/backups:/var/backups/onmyshelf" \
   -v "$(pwd)/volumes/logs:/var/log/onmyshelf" \
   -v "$(pwd)/volumes/media:/var/www/html/media" \
   -v "$(pwd)/volumes/api/modules:/var/www/html/api/v1/inc/modules" \
-  onmyshelf/server:VERSION
+  onmyshelf/server:<VERSION>
 ```
 **Note**: The first start may take a long time, because of the database initialization.
 
@@ -63,21 +63,32 @@ docker run -d \
 1. Login to your account. The default user is `onmyshelf` with password `onmyshelf`
 2. Change your password in `My profile`
 
-# Upgrade
+# Upgrade with script (Linux and MacOS only)
 To upgrade OnMyShelf, run the following command (specify a version number if you want):
 ```bash
-./upgrade.sh [VERSION]
+./upgrade.sh [-v VERSION]
 ```
 
 **Note**: You can check all [available versions here](https://hub.docker.com/r/onmyshelf/server/tags).
 
-# Upgrade manually
+# Upgrade with docker-compose
 1. Change version number in `.env` file
 2. Run the following commands:
 ```bash
 docker compose pull
 docker compose up -d
 ```
+
+# Upgrade manually
+1. Destroy old server container:
+```bash
+docker rm -fv <CONTAINER_NAME>
+```
+2. Pull the new version:
+```bash
+docker pull onmyshelf/server:<VERSION>
+```
+3. Run the server container as describe above.
 
 # Start/stop/restart server
 Run: 
@@ -90,24 +101,6 @@ docker compose start|stop|restart
 - Delete the `volumes` directory to delete all data if your want to reinstall a fresh server
 - Delete this current directory to completely uninstall OnMyShelf and remove all files
 
-# Behind a reverse proxy
-It is recommanded for security concerns to put OnMyShelf behind a reverse proxy.
-
-Don't forget to increase the max body size.
-
-e.g. on nginx: `client_max_body_size 128M;`
-
-# Backups
-It is highly recommended to make regular backups of your OnMyShelf instance.
-
-To backup OnMyShelf database, run the following command:
-```bash
-docker compose exec server /backup.sh
-```
-The database dump file is stored in `volumes/backups` folder.
-
-It's also highly recommended to backup your `volumes/media` folder.
-
 # Official docker image
 The official docker image used in this project is stored on Docker Hub: https://hub.docker.com/r/onmyshelf/server/
 
@@ -115,6 +108,7 @@ Please put a star on it to show your support!
 
 # Build your own image
 You can build your own OnMyShelf image by following [these instructions](build/README.md).
+
 # License
 This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for the full license text.
 

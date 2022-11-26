@@ -87,6 +87,7 @@ fi
 
 # backup instance
 if [ "$backup" = true ] ; then
+	echo "Run backup script:"
 	$compose_command exec server /backup.sh || exit 1
 	echo
 fi

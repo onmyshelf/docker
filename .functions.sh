@@ -210,21 +210,26 @@ start_server() {
 
 	echo
 	echo "Waiting to be ready..."
-	for i in $(seq 1 30) ; do
+	for i in $(seq 1 50) ; do
 		$compose_command ps server | grep -q healthy && break
 		sleep 1
 	done
 
 	# recheck
 	if ! $compose_command ps server | grep -q running ; then
-		echo "Failed to start! Check the logs: $(compose_command) logs"
+		echo "Failed to start! Check the logs with the command: $compose_command logs"
 		exit 3
 	fi
 
+	# get server url
+	url=$(get_config HTTP_PORT)
+	echo $url | grep -q : || url=localhost:$url
+
 	echo
 	echo "OnMyShelf is ready!"
-	echo "Check it now: http://localhost:$(echo $(get_config HTTP_PORT) | cut -d: -f2)"
+	echo "Check it now: http://$url"
 }
+
 
 # initialize compose command
 compose_command=$(compose_command)
