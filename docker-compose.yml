@@ -21,6 +21,7 @@ services:
     environment:
       - LOGFILE
       - LOGGER_LEVEL
+      - DEV_MODE
       - READ_ONLY
     volumes:
       - ./volumes/backups:/var/backups/onmyshelf
