@@ -216,7 +216,7 @@ start_server() {
 	done
 
 	# recheck
-	if ! $compose_command ps server | grep -q running ; then
+	if ! $compose_command ps server | grep -Eq '(healthy|running)' ; then
 		echo "Failed to start! Check the logs with the command: $compose_command logs"
 		exit 3
 	fi
