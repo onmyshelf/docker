@@ -27,6 +27,7 @@ Be sure that you have [Docker Desktop](https://docs.docker.com/get-docker/) inst
 ```bash
 docker compose up -d
 ```
+
 # Install manually
 You can run OnMyShelf containers manually like this:
 

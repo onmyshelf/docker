@@ -155,16 +155,16 @@ set_config() {
 # Returns docker compose command
 compose_command() {
 	# check if compose plugin is installed
-	docker compose ps &> /dev/null
-	if [ $? = 125 ] ; then
-		# if not, try docker-compose
-		docker-compose ps &> /dev/null
-		if [ $? = 0 ] ; then
-			echo docker-compose
-			return 0
-		fi
-	else
+	docker compose version &> /dev/null
+	if [ $? = 0 ] ; then
 		echo docker compose
+		return 0
+	fi
+
+	# if not, try old docker-compose
+	docker-compose version &> /dev/null
+	if [ $? = 0 ] ; then
+		echo docker-compose
 		return 0
 	fi
 
