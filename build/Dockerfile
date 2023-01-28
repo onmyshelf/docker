@@ -1,6 +1,6 @@
 # Dockerfile for OnMyShelf API
 
-FROM php:8-apache
+FROM php:8.2-apache
 
 # Install requirements (+ mysql client commands for backups)
 RUN apt-get update && \
@@ -10,21 +10,18 @@ RUN apt-get update && \
     a2enmod rewrite && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
-    sed -i 's/^\;*upload_max_filesize =/upload_max_filesize = 128M/; s/^\;*post_max_size =/post_max_size = 128M/' "$PHP_INI_DIR/php.ini" && \
+    sed -i 's/^\;*upload_max_filesize =.*/upload_max_filesize = 128M/; s/^\;*post_max_size =.*/post_max_size = 128M/' "$PHP_INI_DIR/php.ini" && \
     mkdir -p /var/www/html/api/v1
 
 HEALTHCHECK --interval=15s --timeout=3s \
     CMD curl --fail http://localhost/api/v1/ || exit 1
 
-# Overwrite entrypoint
-COPY docker-php-entrypoint /usr/local/bin/
-# Copy backup script
-COPY backup.sh /
+# copy scripts (and overwrite entrypoint)
+COPY bin/* /usr/local/bin/
 
 # Fix script permissions
-RUN chown root:root /backup.sh /usr/local/bin/docker-php-entrypoint && \
-    chmod 700 /backup.sh && \
-    chmod 755 /usr/local/bin/docker-php-entrypoint
+RUN chown root:root /usr/local/bin/* && \
+    chmod 755 /usr/local/bin/*
 
 # Copy web interface sources
 COPY web/dist/ /var/www/html

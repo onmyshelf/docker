@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+#  Run OnMyShelf command line
+#
+
+cd /var/www/html/api/v* && php bin/oms "$@"
