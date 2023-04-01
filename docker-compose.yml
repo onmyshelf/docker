@@ -17,7 +17,7 @@ services:
       - db
     restart: unless-stopped
     ports:
-      - ${HTTP_PORT:-8080}:80
+      - ${HTTP_PORT:-8035}:80
     environment:
       - LOGFILE
       - LOGGER_LEVEL

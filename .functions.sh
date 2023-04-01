@@ -211,7 +211,7 @@ start_server() {
 	echo
 	echo "Waiting to be ready..."
 	for i in $(seq 1 50) ; do
-		$compose_command ps server | grep -q healthy && break
+		$compose_command logs server 2> /dev/null | grep -q "Starting Apache server" && break
 		sleep 1
 	done
 

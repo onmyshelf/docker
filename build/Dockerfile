@@ -2,7 +2,7 @@
 
 FROM php:8.2-apache
 
-# Install requirements (+ mysql client commands for backups)
+# Install requirements (+ mysql client commands for backups) & configure apache
 RUN apt-get update && \
     apt-get install -y libfreetype6-dev libjpeg-dev libpng-dev libpq-dev libssl-dev libzip-dev unzip zlib1g-dev mariadb-client && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
