@@ -2,7 +2,7 @@
 
 OnMyShelf docker server is the easy way to run OnMyShelf.
 
-You can also install it manually (read [documentation here](https://docs.onmyshelf.cm/admin-guide/)).
+You can also install it manually (read [documentation here](https://docs.onmyshelf.app/admin-guide/)).
 
 # Install on Linux (the easiest way)
 Go into the current directory and run the install script:
@@ -114,6 +114,6 @@ You can build your own OnMyShelf image by following [these instructions](build/R
 This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for the full license text.
 
 # Credits
-Website: https://onmyshelf.cm
+Website: https://onmyshelf.app
 
 Source code: https://github.com/onmyshelf/docker
