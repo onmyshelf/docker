@@ -210,13 +210,21 @@ start_server() {
 
 	echo
 	echo "Waiting to be ready..."
+	ready=false
 	for i in $(seq 1 50) ; do
-		$compose_command logs server 2> /dev/null | grep -q "Starting Apache server" && break
 		sleep 1
+		# check logs to see if Apache is ready
+		$compose_command logs server 2> /dev/null | grep -q "Starting Apache server" || continue
+		
+		# check container status
+		$compose_command ps server | grep -Eq '(healthy|running)' || continue
+		
+		# ready: quit loop
+		ready=true
+		break
 	done
 
-	# recheck
-	if ! $compose_command ps server | grep -Eq '(healthy|running)' ; then
+	if ! $ready ; then
 		echo "Failed to start! Check the logs with the command: $compose_command logs"
 		exit 3
 	fi
