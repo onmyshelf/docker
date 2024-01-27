@@ -4,9 +4,9 @@ FROM php:8.2-apache
 
 # Install requirements (+ mysql client commands for backups) & configure apache
 RUN apt-get update && \
-    apt-get install -y libfreetype6-dev libjpeg-dev libpng-dev libpq-dev libssl-dev libzip-dev unzip zlib1g-dev mariadb-client && \
+    apt-get install -y libfreetype6-dev libjpeg-dev libpng-dev libpq-dev libssl-dev libzip-dev unzip zlib1g-dev mariadb-client git && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install exif gd pdo pdo_mysql pdo_pgsql git zip && \
+    docker-php-ext-install exif gd pdo pdo_mysql pdo_pgsql zip && \
     a2enmod rewrite && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
