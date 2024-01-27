@@ -1,0 +1,4 @@
+[safe]
+        directory = /var/www/html/api/v1
+[pull]
+        rebase = false

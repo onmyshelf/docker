@@ -6,7 +6,7 @@ FROM php:8.2-apache
 RUN apt-get update && \
     apt-get install -y libfreetype6-dev libjpeg-dev libpng-dev libpq-dev libssl-dev libzip-dev unzip zlib1g-dev mariadb-client && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install exif gd pdo pdo_mysql pdo_pgsql zip && \
+    docker-php-ext-install exif gd pdo pdo_mysql pdo_pgsql git zip && \
     a2enmod rewrite && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
@@ -15,6 +15,9 @@ RUN apt-get update && \
 
 HEALTHCHECK --interval=15s --timeout=3s \
     CMD curl --fail http://localhost/api/v1/ || exit 1
+
+# copy git config for root user
+COPY gitconfig /root/.gitconfig
 
 # copy scripts (and overwrite entrypoint)
 COPY bin/* /usr/local/bin/
