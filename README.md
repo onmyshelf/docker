@@ -80,6 +80,14 @@ docker compose pull
 docker compose up -d
 ```
 
+## The nightly version (unstable)
+If you want to test OnMyShelf latest features, you can use the nightly version.
+
+Be careful that this version can be highly unstable, as it is build every night with the latest commits of
+the API and web interface projects.
+
+If you want to use it, set version to `nightly` and do not forget to run `docker compose pull && docker compose up -d` periodically.
+
 # Upgrade manually
 1. Destroy old server container:
 ```bash
