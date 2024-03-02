@@ -1,9 +1,10 @@
 version: '3'
 services:
   db:
-    image: mariadb:10.8
+    image: mariadb:11.3
     restart: unless-stopped
     environment:
+      - MARIADB_AUTO_UPGRADE=yes
       - MARIADB_RANDOM_ROOT_PASSWORD=yes
       - MARIADB_USER=onmyshelf
       - MARIADB_PASSWORD=onmyshelf
