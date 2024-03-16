@@ -1,6 +1,6 @@
 # Dockerfile for OnMyShelf API
 
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 # Install requirements (+ mysql client commands for backups) & configure apache
 RUN apt-get update && \
@@ -13,8 +13,7 @@ RUN apt-get update && \
     sed -i 's/^\;*upload_max_filesize =.*/upload_max_filesize = 128M/; s/^\;*post_max_size =.*/post_max_size = 128M/' "$PHP_INI_DIR/php.ini" && \
     mkdir -p /var/www/html/api/v1
 
-HEALTHCHECK --interval=15s --timeout=3s \
-    CMD curl --fail http://localhost/api/v1/ || exit 1
+HEALTHCHECK CMD curl --fail http://localhost/api/v1/ || exit 1
 
 # copy git config for root user
 COPY gitconfig /root/.gitconfig
