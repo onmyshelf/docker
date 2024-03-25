@@ -28,12 +28,6 @@ cd "$(dirname "$0")" || exit
 # load functions
 source .functions.sh || exit
 
-# check docker compose command
-if [ -z "$compose_command" ] ; then
-	echo "Failed to find docker compose command"
-	exit 1
-fi
-
 # get options
 force_mode=false
 while [ $# -gt 0 ] ; do
@@ -88,7 +82,7 @@ fi
 # backup instance
 if [ "$backup" = true ] ; then
 	echo "Run backup script:"
-	$compose_command exec server oms-backup || exit 1
+	docker compose exec server oms-backup || exit 1
 	echo
 fi
 

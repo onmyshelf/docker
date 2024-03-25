@@ -9,11 +9,5 @@ cd "$(dirname "$0")" || exit
 # load functions
 source .functions.sh || exit
 
-# check docker compose command
-if [ -z "$compose_command" ] ; then
-	echo "Failed to find docker compose command"
-	exit 1
-fi
-
 # run oms command
-$compose_command exec server oms "$@"
+docker compose exec server oms "$@"

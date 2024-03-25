@@ -152,23 +152,36 @@ set_config() {
 }
 
 
-# Returns docker compose command
-compose_command() {
-	# check if compose plugin is installed
-	docker compose version &> /dev/null
-	if [ $? = 0 ] ; then
-		echo docker compose
-		return 0
-	fi
+# Installs a package
+# Usage: install_pkg PACKAGE
+install_pkg() {
+	local cmd
 
-	# if not, try old docker-compose
-	docker-compose version &> /dev/null
-	if [ $? = 0 ] ; then
-		echo docker-compose
-		return 0
-	fi
+	# try to find package manager
+	for cmd in apt-get dnf yum apk notfound ; do
+		lb_command_exists $cmd && break
+	done
 
-	return 1
+	case $cmd in
+		apt-get)
+			if [ $1 = docker ] ; then
+				# on debian family, the docker package is named docker.io
+				apt-get install -y docker.io
+			else
+				apt-get install -y $1
+			fi
+			;;
+		dnf|yum)
+			$cmd install -y $1
+			;;
+		apk)
+			apk add $1
+			;;
+		*)
+			echo "Package manager not found! Please install $1 manually."
+			return 1
+			;;
+	esac
 }
 
 
@@ -202,11 +215,11 @@ pull_project() {
 start_server() {
 	echo
 	echo "Pulling docker image..."
-	$compose_command pull || exit
+	docker compose pull || exit
 
 	echo
 	echo "Starting OnMyShelf..."
-	$compose_command up -d || exit
+	docker compose up -d || exit
 
 	echo
 	echo "Waiting to be ready..."
@@ -214,10 +227,10 @@ start_server() {
 	for i in $(seq 1 50) ; do
 		sleep 1
 		# check logs to see if Apache is ready
-		$compose_command logs server 2> /dev/null | grep -q "Starting Apache server" || continue
+		docker compose logs server 2> /dev/null | grep -q "Starting Apache server" || continue
 		
 		# check container status
-		$compose_command ps server | grep -Eq '(healthy|running)' || continue
+		docker compose ps server | grep -Eq '(healthy|running)' || continue
 		
 		# ready: quit loop
 		ready=true
@@ -225,7 +238,7 @@ start_server() {
 	done
 
 	if ! $ready ; then
-		echo "Failed to start! Check the logs with the command: $compose_command logs"
+		echo "Failed to start! Check the logs with the command: docker compose logs"
 		exit 3
 	fi
 
@@ -239,5 +252,34 @@ start_server() {
 }
 
 
-# initialize compose command
-compose_command=$(compose_command)
+# check if docker command exists
+if ! lb_command_exists docker ; then
+	echo "Docker is required but seems to be missing on this system."
+	lb_yesno "Do you want to install it?" || exit 1
+
+	install_pkg docker
+	echo
+
+	# re-check docker command
+	if ! lb_command_exists docker ; then
+		echo "Failed to find docker command."
+		echo "Please install it manually: https://docs.docker.com/get-docker/"
+		exit 1
+	fi
+fi
+
+# check if docker compose command exists
+if ! docker compose version &> /dev/null ; then
+	echo "The docker compose tool is required but seems to be missing on this system."
+	lb_yesno "Do you want to install it?" || exit 1
+	
+	install_pkg docker-compose-plugin
+	echo
+
+	# re-check if docker compose command exists
+	if ! docker compose version &> /dev/null ; then
+		echo "Failed to find docker compose command."
+		echo "Please install it manually: https://docs.docker.com/compose/install/"
+		exit 1
+	fi
+fi

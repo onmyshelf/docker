@@ -17,39 +17,6 @@ print_help() {
 }
 
 
-# Install a package
-# Usage: install PACKAGE
-install() {
-	local cmd
-
-	# try to find package manager
-	for cmd in apt-get dnf yum apk notfound ; do
-		lb_command_exists $cmd && break
-	done
-
-	case $cmd in
-		apt-get)
-			if [ $1 = docker ] ; then
-				# on debian family, the docker package is named docker.io
-				apt-get install -y docker.io
-			else
-				apt-get install -y $1
-			fi
-			;;
-		dnf|yum)
-			$cmd install -y $1
-			;;
-		apk)
-			apk add $1
-			;;
-		*)
-			echo "Package manager not found! Please install $1 manually."
-			return 1
-			;;
-	esac
-}
-
-
 #
 #  Main program
 #
@@ -96,39 +63,6 @@ while [ $# -gt 0 ] ; do
 	esac
 	shift
 done
-
-# check if docker command exists
-if ! lb_command_exists docker ; then
-	echo "Docker is required but seems to be missing on this system."
-	if lb_yesno "Do you want to install it?" ; then
-		install docker
-	fi
-	echo
-
-	# re-check docker command
-	if ! lb_command_exists docker ; then
-		echo "Failed to find docker command."
-		echo "Please install it manually: https://docs.docker.com/get-docker/"
-		exit 1
-	fi
-fi
-
-if [ -z "$compose_command" ] ; then
-	echo "The docker compose tool is required but seems to be missing on this system."
-	echo "Do you want to install it?"
-	if lb_yesno "Install docker:" ; then
-		install docker-compose-plugin
-	fi
-	echo
-
-	# re-check if docker compose command exists
-	compose_command=$(compose_command)
-	if [ -z "$compose_command" ] ; then
-		echo "Failed to find docker compose command."
-		echo "Please install it manually: https://docs.docker.com/compose/install/"
-		exit 1
-	fi
-fi
 
 pull_project
 
