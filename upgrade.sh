@@ -34,7 +34,6 @@ while [ $# -gt 0 ] ; do
 	case $1 in
 		-b|--backup)
 			backup=true
-			shift
 			;;
 		-v|--version)
 			if [ -z "$2" ] ; then
@@ -46,11 +45,9 @@ while [ $# -gt 0 ] ; do
 			;;
 		--no-backup)
 			backup=false
-			shift
 			;;
 		-y|--yes)
 			force_mode=true
-			shift
 			;;
 		-h|--help)
 			print_help
