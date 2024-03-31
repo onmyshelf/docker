@@ -49,7 +49,6 @@ while [ $# -gt 0 ] ; do
 			;;
 		-y|--yes)
 			force_mode=true
-			shift
 			;;
 		-h|--help)
 			print_help
