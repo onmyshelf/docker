@@ -6,7 +6,8 @@ set -e
 #
 
 # environment variables that can overwrite config.php file
-env_vars=(LOGFILE LOGGER_LEVEL DEV_MODE READ_ONLY)
+env_vars=(EMAIL_FROM SMTP_SERVER SMTP_PORT SMTP_USER SMTP_PASSWORD \
+          OMS_URL LOGFILE LOGGER_LEVEL DEV_MODE READ_ONLY)
 
 # main folders
 www=/var/www/html/api/v1
@@ -45,6 +46,12 @@ if ! [ -f $www/config.php ] ; then
 fi
 
 # set default config values
+edit_config EMAIL_FROM onmyshelf@example.com
+edit_config SMTP_SERVER
+edit_config SMTP_PORT 465
+edit_config SMTP_USER
+edit_config SMTP_PASSWORD
+edit_config OMS_URL
 edit_config LOGFILE $log
 edit_config LOGGER_LEVEL INFO
 edit_config DEV_MODE false
