@@ -185,6 +185,17 @@ install_pkg() {
 }
 
 
+# Check if .env file has every variables
+check_env() {
+	for env in $(grep = env.example | cut -d= -f1 | sed 's/#//g') ; do
+		if ! grep -q $env= .env ; then
+			echo -e "[\e[;33mWARN\e[0m] Some variables are missing in your .env file. Please compare with env.example file."
+			break
+		fi
+	done
+}
+
+
 # Change version
 change_version() {
 	# ignore if not defined

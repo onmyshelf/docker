@@ -72,6 +72,7 @@ if ! [ -f .env ] ; then
 	echo
 else
 	port=$(get_config HTTP_PORT)
+	check_env
 fi
 
 # get http port from config

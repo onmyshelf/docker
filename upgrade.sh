@@ -64,6 +64,8 @@ done
 
 pull_project
 
+check_env
+
 if [ -z "$backup" ] ; then
 	if $force_mode ; then
 		backup=true
