@@ -190,6 +190,7 @@ check_env() {
 	for env in $(grep = env.example | cut -d= -f1 | sed 's/#//g') ; do
 		if ! grep -q $env= .env ; then
 			echo -e "[\e[;33mWARN\e[0m] Some variables are missing in your .env file. Please compare with env.example file."
+			echo
 			break
 		fi
 	done
@@ -235,14 +236,14 @@ start_server() {
 	echo
 	echo "Waiting to be ready..."
 	ready=false
-	for i in $(seq 1 50) ; do
+	for i in $(seq 1 120) ; do
 		sleep 1
 		# check logs to see if Apache is ready
 		docker compose logs server 2> /dev/null | grep -q "Starting Apache server" || continue
-		
+
 		# check container status
 		docker compose ps server | grep -Eq '(healthy|running)' || continue
-		
+
 		# ready: quit loop
 		ready=true
 		break
