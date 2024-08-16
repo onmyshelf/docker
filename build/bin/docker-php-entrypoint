@@ -71,6 +71,11 @@ fi
 
 chown www-data $log
 
+# create folders for modules
+for m in database import storage ; do
+	mkdir -p $www/inc/modules/$m && chown www-data $www/inc/modules/$m
+done
+
 # install/upgrade instance
 (cd $www && php bin/oms install && php bin/oms upgrade)
 
