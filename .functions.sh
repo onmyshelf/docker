@@ -236,7 +236,7 @@ start_server() {
 	echo
 	echo "Waiting to be ready..."
 	ready=false
-	for i in $(seq 1 120) ; do
+	for i in $(seq 1 300) ; do
 		sleep 1
 		# check logs to see if Apache is ready
 		docker compose logs server 2> /dev/null | grep -q "Starting Apache server" || continue
