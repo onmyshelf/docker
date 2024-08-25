@@ -4,23 +4,25 @@ OnMyShelf docker server is the easy way to run OnMyShelf.
 
 You can also install it manually (read [documentation here](https://docs.onmyshelf.app/admin-guide/)).
 
-# Install on Linux (the easiest way)
+# Install procedure
+## Install on Linux (the easiest way)
 Go into the current directory and run the install script:
 ```bash
 ./install.sh
 ```
-If docker or docker compose install fails, please install it manually (see [official documentation here](https://docs.docker.com/get-docker/)).
+If docker or docker compose install fails, please install it manually (see [official documentation here](https://www.docker.com)).
 
-# Install on MacOS
-Be sure that you have [Docker Desktop](https://docs.docker.com/get-docker/) installed.
+## Install on MacOS
+Be sure that you have [Docker](https://www.docker.com) installed.
 
 Go into the current directory and run the install script:
 ```bash
 ./install.sh
 ```
 
-# Install on Windows
-Be sure that you have [Docker Desktop](https://docs.docker.com/get-docker/) installed.
+## Install using docker compose
+If you're using Windows, you can use this technique.
+Be sure that you have [Docker](https://www.docker.com) installed.
 
 1. Copy `env.example` to `.env` and edit it
 2. Go to the current directory and run the following command:
@@ -28,51 +30,26 @@ Be sure that you have [Docker Desktop](https://docs.docker.com/get-docker/) inst
 docker compose up -d
 ```
 
-# Install manually
-You can run OnMyShelf containers manually like this:
-
-1. Create a network for OnMyShelf containers:
-```bash
-docker network create onmyshelf
-```
-2. Run database server:
-```bash
-docker run -d \
-  --network onmyshelf --network-alias=db \
-  -e MARIADB_RANDOM_ROOT_PASSWORD=yes \
-  -e MARIADB_USER=onmyshelf -e MARIADB_PASSWORD=onmyshelf \
-  -e MARIADB_DATABASE=onmyshelf \
-  -v "$(pwd)/volumes/db/mysql:/var/lib/mysql" \
-  mariadb:10.8
-```
-3. Run OnMyShelf server:
-```bash
-docker run -d \
-  --network onmyshelf \
-  -p 8035:80 \
-  -v "$(pwd)/volumes/backups:/var/backups/onmyshelf" \
-  -v "$(pwd)/volumes/logs:/var/log/onmyshelf" \
-  -v "$(pwd)/volumes/media:/var/www/html/media" \
-  -v "$(pwd)/volumes/api/modules:/var/www/html/api/v1/inc/modules" \
-  onmyshelf/server:<VERSION>
-```
-**Note**: The first start may take a long time, because of the database initialization.
-
-**Note**: Of course, you can add some environment variables as described in `env.exemple` file, or change the external port.
-
 # After install
-1. Login to your account. The default user is `onmyshelf` with password `onmyshelf`
+1. Login with user `onmyshelf` and password `onmyshelf`
 2. Change your password in `My profile`
 
-# Upgrade with script (Linux and MacOS only)
+# Upgrade procedure
+## Upgrade on Linux or MacOS (the easiest way)
 To upgrade OnMyShelf, run the following command (specify a version number if you want):
 ```bash
-./upgrade.sh [-v VERSION]
+./upgrade.sh
 ```
 
-**Note**: You can check all [available versions here](https://hub.docker.com/r/onmyshelf/server/tags).
+## Upgrade using git
+If you're using Windows, you can use this technique.
+Run these commands:
+```bash
+git pull
+docker compose up -d
+```
 
-# Upgrade with docker-compose
+## Upgrade without using git
 1. Change version number in `.env` file
 2. Run the following commands:
 ```bash
@@ -80,27 +57,19 @@ docker compose pull
 docker compose up -d
 ```
 
-## The nightly version (unstable)
+**Note**: You can check all [available versions here](https://hub.docker.com/r/onmyshelf/server/tags).
+
+# The nightly version (unstable)
 If you want to test OnMyShelf latest features, you can use the nightly version.
 
 Be careful that this version can be highly unstable, as it is build every night with the latest commits of
 the API and web interface projects.
+**You should not use nightly version in production.**
 
-If you want to use it, set version to `nightly` and do not forget to run `docker compose pull && docker compose up -d` periodically.
-
-# Upgrade manually
-1. Destroy old server container:
-```bash
-docker rm -fv <CONTAINER_NAME>
-```
-2. Pull the new version:
-```bash
-docker pull onmyshelf/server:<VERSION>
-```
-3. Run the server container as describe above.
+If you want to use it, set `VERSION=nightly` in `.env` file and do not forget to run `docker compose pull && docker compose up -d` periodically.
 
 # Start/stop/restart server
-Run: 
+Run these commands:
 ```bash
 docker compose start|stop|restart
 ```

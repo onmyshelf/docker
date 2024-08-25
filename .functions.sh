@@ -275,7 +275,7 @@ if ! lb_command_exists docker ; then
 	# re-check docker command
 	if ! lb_command_exists docker ; then
 		echo "Failed to find docker command."
-		echo "Please install it manually: https://docs.docker.com/get-docker/"
+		echo "Please install it manually: https://www.docker.com"
 		exit 1
 	fi
 fi
@@ -291,7 +291,7 @@ if ! docker compose version &> /dev/null ; then
 	# re-check if docker compose command exists
 	if ! docker compose version &> /dev/null ; then
 		echo "Failed to find docker compose command."
-		echo "Please install it manually: https://docs.docker.com/compose/install/"
+		echo "Please install it manually: https://www.docker.com"
 		exit 1
 	fi
 fi
