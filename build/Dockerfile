@@ -4,7 +4,9 @@ FROM php:8.3-apache
 
 # Install requirements (+ mysql client commands for backups) & configure apache
 RUN apt-get update && \
-    apt-get install -y libfreetype6-dev libjpeg-dev libpng-dev libpq-dev libssl-dev libzip-dev unzip zlib1g-dev mariadb-client git && \
+    apt-get install -y libfreetype6-dev libjpeg-dev libpng-dev libpq-dev libssl-dev libzip-dev unzip zlib1g-dev mariadb-client git redis && \
+    pecl install redis && \
+    docker-php-ext-enable redis && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install exif gd pdo pdo_mysql pdo_pgsql zip && \
     a2enmod rewrite && \

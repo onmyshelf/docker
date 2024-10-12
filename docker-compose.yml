@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb:11.4
+    image: mariadb:lts
     restart: unless-stopped
     environment:
       - MARIADB_AUTO_UPGRADE=yes
@@ -10,6 +10,9 @@ services:
       - MARIADB_DATABASE=onmyshelf
     volumes:
       - ./volumes/db/mysql:/var/lib/mysql
+
+  redis:
+    image: redis:7.4
 
   server:
     image: onmyshelf/server:${VERSION:-1.5.0}
