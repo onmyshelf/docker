@@ -15,7 +15,7 @@ services:
     image: redis:7.4
 
   server:
-    image: onmyshelf/server:${VERSION:-1.5.1}
+    image: onmyshelf/server:${VERSION:-1.5.2}
     depends_on:
       - db
     restart: unless-stopped
