@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb:lts
+    image: mariadb:11.4
     restart: unless-stopped
     environment:
       - MARIADB_AUTO_UPGRADE=yes
