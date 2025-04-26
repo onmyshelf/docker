@@ -3,11 +3,11 @@ services:
     image: mariadb:11.4
     restart: unless-stopped
     environment:
-      - MARIADB_AUTO_UPGRADE=yes
-      - MARIADB_RANDOM_ROOT_PASSWORD=yes
-      - MARIADB_USER=onmyshelf
-      - MARIADB_PASSWORD=onmyshelf
-      - MARIADB_DATABASE=onmyshelf
+      MARIADB_AUTO_UPGRADE: yes
+      MARIADB_RANDOM_ROOT_PASSWORD: yes
+      MARIADB_USER: onmyshelf
+      MARIADB_PASSWORD: onmyshelf
+      MARIADB_DATABASE: onmyshelf
     volumes:
       - ./volumes/db/mysql:/var/lib/mysql
 
@@ -21,17 +21,7 @@ services:
     restart: unless-stopped
     ports:
       - ${HTTP_PORT:-8035}:80
-    environment:
-      - OMS_URL
-      - EMAIL_FROM
-      - SMTP_SERVER
-      - SMTP_PORT
-      - SMTP_USER
-      - SMTP_PASSWORD
-      - LOGFILE
-      - LOGGER_LEVEL
-      - DEV_MODE
-      - READ_ONLY
+    env_file: .env
     volumes:
       - ./volumes/backups:/var/backups/onmyshelf
       - ./volumes/logs:/var/log/onmyshelf
