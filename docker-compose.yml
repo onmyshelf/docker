@@ -16,7 +16,7 @@ services:
     image: redis:8.0
     pull_policy: always
     volumes:
-      - ./volumes/db/mysql:/var/lib/mysql
+      - ./volumes/redis:/data
 
   server:
     image: onmyshelf/server:${VERSION:-1.5.3}
