@@ -6,6 +6,10 @@ To see complete new features, see:
 - [Changelog of the API](https://github.com/onmyshelf/api/blob/master/CHANGELOG.md)
 - [Changelog of the Web interface](https://github.com/onmyshelf/web/blob/master/CHANGELOG.md)
 
+# 1.5.3 (2025-07-19)
+- Upgrade to MariaDB 11.8 and Redis 8.0
+- Set pull policy to always for each image
+
 # 1.5.2 (2025-03-15)
 - Set static value for MariaDB major version
 
