@@ -1,6 +1,6 @@
 # Dockerfile for OnMyShelf API
 
-FROM php:8.3-apache
+FROM php:8.5-apache
 
 # Install requirements (+ mysql client commands for backups) & configure apache
 RUN apt-get update && \

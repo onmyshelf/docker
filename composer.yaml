@@ -1,11 +1,11 @@
 services:
   db:
-    image: mariadb:11.8
+    image: mariadb:lts
     pull_policy: always
     restart: unless-stopped
     environment:
-      MARIADB_AUTO_UPGRADE: true
-      MARIADB_RANDOM_ROOT_PASSWORD: true
+      MARIADB_AUTO_UPGRADE: 1
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
       MARIADB_USER: onmyshelf
       MARIADB_PASSWORD: onmyshelf
       MARIADB_DATABASE: onmyshelf
@@ -13,7 +13,7 @@ services:
       - ./volumes/db/mysql:/var/lib/mysql
 
   redis:
-    image: redis:8.0
+    image: redis
     pull_policy: always
     volumes:
       - ./volumes/redis:/data
