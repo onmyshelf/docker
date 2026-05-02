@@ -6,6 +6,9 @@ To see complete new features, see:
 - [Changelog of the API](https://github.com/onmyshelf/api/blob/master/CHANGELOG.md)
 - [Changelog of the Web interface](https://github.com/onmyshelf/web/blob/master/CHANGELOG.md)
 
+# 1.5.5 (2026-XX-XX)
+- Fix redis start
+
 # 1.5.4 (2026-03-31)
 - Upgrade to PHP 8.5
 
